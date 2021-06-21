@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import StoreItem from './StoreItem';
 
 function App() {
-  // let itemCategories = [];
+  let itemCategories = [];
   // const [itemCategory, setItemCategory] = useState(null);
 
   const [storeItems, setStoreItems] = useState([]);
