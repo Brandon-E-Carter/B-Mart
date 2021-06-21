@@ -1,7 +1,7 @@
 import "./StoreItem.css";
 
 function StoreItem(props) {
-    const { category, description, id, image, price, title } = props.displayItem;
+    const { description, image, price, title } = props.displayItem;
     const purchaseButton = props.purchaseButton;
     console.log(description);
 
@@ -10,7 +10,7 @@ function StoreItem(props) {
             <div className="image-container">
                 <img src={image} alt={title} />
             </div>
-            
+
             <p>{title}</p>
 
             <div className="description flex-container">

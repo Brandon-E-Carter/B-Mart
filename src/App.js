@@ -1,32 +1,28 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import firebase from './firebase.js';
-import FakeStoreApi from './FakeStoreApi.js';
+// import firebase from './firebase.js';
+// import FakeStoreApi from './FakeStoreApi.js';
 import StoreItem from './StoreItem';
 
 function App() {
-  let itemCategories = [];
+  // let itemCategories = [];
 
-  const [itemCategory, setItemCategory] = useState(null);
+  // const [itemCategory, setItemCategory] = useState(null);
 
   const [storeItems, setStoreItems] = useState([]);
 
   useEffect(() => {
-    apiData('products');
-  }, [])
-
-  console.log(storeItems);
-
-  function apiData(param) {
-    fetch(`https://fakestoreapi.com/${param}`)
+    fetch(`https://fakestoreapi.com/products`)
       .then(responce => responce.json())
       .then(jsonData => {
         sortItems(jsonData);
       });
-  }
+  }, [])
+
+  console.log(storeItems);
 
   function sortItems(products) {
-    itemCategories = [new Set(products.category)];
+    // itemCategories = [new Set(products.category)];
     console.log(products);
 
     setStoreItems(products)
