@@ -1,23 +1,56 @@
-import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import firebase from './firebase.js';
+import FakeStoreApi from './FakeStoreApi.js';
+import StoreItem from './StoreItem';
 
 function App() {
+  let itemCategories = [];
+
+  const [itemCategory, setItemCategory] = useState(null);
+
+  const [storeItems, setStoreItems] = useState([]);
+
+  useEffect(() => {
+    apiData('products');
+  }, [])
+
+  console.log(storeItems);
+
+  function apiData(param) {
+    fetch(`https://fakestoreapi.com/${param}`)
+      .then(responce => responce.json())
+      .then(jsonData => {
+        sortItems(jsonData);
+      });
+  }
+
+  function sortItems(products) {
+    itemCategories = [new Set(products.category)];
+    console.log(products);
+
+    setStoreItems(products)
+  }
+
+  function addToCart(item) {
+    console.log(`${item.title} added To Cart`);
+  }
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>My E-commerce Website</h1>
+
+      {
+        storeItems.map(item => {
+          return <StoreItem
+            displayItem={item}
+            key={item.id}
+            purchaseButton={() => addToCart(item)}
+          />
+        })
+      }
     </div>
   );
 }
