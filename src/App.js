@@ -6,7 +6,6 @@ import StoreItem from './StoreItem';
 
 function App() {
   // let itemCategories = [];
-
   // const [itemCategory, setItemCategory] = useState(null);
 
   const [storeItems, setStoreItems] = useState([]);
