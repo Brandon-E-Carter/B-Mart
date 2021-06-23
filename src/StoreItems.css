@@ -1,0 +1,27 @@
+.store-item,
+.cart-item {
+   width: 300px;
+}
+
+.store-item .flex-container {
+   justify-content: space-between;
+}
+
+.store-item .image-container {
+   height: 300px;
+}
+
+.cart-item .image-container {
+   width: 100px;
+}
+
+img {
+   object-fit: contain;
+   height: 100%;
+}
+
+.description {
+   height: 150px;
+   overflow: hidden;
+   text-overflow: clip;
+}
