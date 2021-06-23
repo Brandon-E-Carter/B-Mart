@@ -1,25 +1,34 @@
 import "./StoreItem.css";
 
 function StoreItem(props) {
-    const { description, image, price, title } = props.displayItem;
-    const purchaseButton = props.purchaseButton;
-    console.log(description);
+   const { filteredItems, purchaseButton } = props;
 
-    return (
-        <div className="displayItem">
+   const displayItems = filteredItems.map(item => {
+      const { description, image, price, title } = item;
+      return (
+         <li className="displayItem">
             <div className="image-container">
-                <img src={image} alt={title} />
+               <img src={image} alt={title} />
             </div>
 
             <p>{title}</p>
 
             <div className="description flex-container">
-                <button onClick={purchaseButton}>Add to Cart</button>
-                <p>{price}</p>
+               <button onClick={purchaseButton}>Add to Cart</button>
+               <p>{price}</p>
             </div>
             <p>{description}</p>
-        </div>
-    )
+         </li>
+      )
+   })
+
+   return (
+      <div>
+         <ul className="results flex-container">
+            {displayItems}
+         </ul>
+      </div>
+   )
 }
 
 export default StoreItem;
