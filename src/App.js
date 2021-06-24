@@ -22,6 +22,7 @@ function App() {
    const filterOptions = [...new Set(allStoreItems.map(item => {
       return item.category;
    }))];
+   
 
    useEffect(() => {
       fetch(`https://fakestoreapi.com/products`)
