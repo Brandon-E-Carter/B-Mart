@@ -2,7 +2,12 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import firebase from './firebase.js';
 import StoreItems from './StoreItems';
-import FilterList from './Filter/FilterList';
+import FilterList from './FilterList';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faPlus, faMinus, faTrashAlt, faShoppingCart, faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
+library.add(faPlus, faMinus, faTrashAlt);
 
 function App() {
    const ApiObject = [
@@ -172,7 +177,12 @@ function App() {
 
    const [allStoreItems, setAllStoreItems] = useState([]);
    const [filteredItems, setfilteredItems] = useState([]);
+
    const [cartItems, setCartItems] = useState([]);
+   const [totalCartQuantity, setTotalCartQuanity] = useState(0);
+   const [cartIsActive, setCartIsActive] = useState(false);
+
+   const [filterPanel, setFilterPanel] = useState(true);
 
    const filterOptions = [...new Set(allStoreItems.map(item => {
       return item.category;
@@ -186,20 +196,37 @@ function App() {
             const items = setQuantity(jsonData);
             setAllStoreItems(items);
             setfilteredItems(items);
+            firebaseTesting(items);
          });
    }, [])
 
    function setQuantity(items) {
       const newItems = items.map(item => {
          const cartQuantity = 0;
-         const storeQuantity = Math.ceil(Math.random() * 10);
-         
-         return {...item, cartQuantity, storeQuantity};
+         const storeMaxQuantity = Math.ceil(Math.random() * 10);
+         const storeQuantity = storeMaxQuantity;
+
+         return { ...item, cartQuantity, storeQuantity, storeMaxQuantity };
       })
 
       console.log(newItems);
 
       return newItems;
+   }
+
+   function firebaseTesting(items) {
+      const dbRef = firebase.database().ref('StoreItems');
+
+      // const firebaseThing = null;
+      // const firebaseThing = "Why, hi there, howdy partner";
+
+      // dbRef.set(items);
+      // dbRef.push("heey there");
+      // dbRef.child(firebaseThing).remove();
+
+      dbRef.on('value', (response) => {
+         console.log(response.val());
+      })
    }
 
    function sortItems(filters) {
@@ -220,52 +247,108 @@ function App() {
    }
 
    function changeCartQuantity(item, changeType) {
-      if(changeType === "Add") {
-         item.cartQuantity++;
-      } else if (changeType === "Remove") {
+      if (changeType === "add" || changeType === "addToCart") {
+         if (item.cartQuantity < item.storeMaxQuantity) {
+            item.storeQuantity--;
+            item.cartQuantity++;
+         }
+      } else if (changeType === "remove") {
+         item.storeQuantity++;
          item.cartQuantity--;
       } else {
          item.cartQuantity = 0;
+         item.storeQuantity = item.storeMaxQuantity;
       }
 
-      const newCartItems = filteredItems.filter(cartItem => {
+      const newCartItems = allStoreItems.filter(cartItem => {
          return cartItem.cartQuantity > 0;
       })
 
-      setCartItems([...newCartItems])
+      let totalQuantity = 0;
+
+      newCartItems.forEach(cartItem => {
+         totalQuantity += cartItem.cartQuantity;
+      })
+
+      setTotalCartQuanity(totalQuantity);
+
+      if (newCartItems.length === 0) {
+         setCartIsActive(!cartIsActive);
+      }
+
+      setCartItems(newCartItems);
+   }
+
+   function toggleCart() {
+      if (cartItems.length > 0) {
+         setCartIsActive(!cartIsActive);
+      }
+   }
+
+   function toggleFilterPanel() {
+      setFilterPanel(!filterPanel);
    }
 
    return (
-      <div className="App">
-         <h1>My E-commerce Website</h1>
-
-         <div>
-            <ul>
-               <StoreItems
-                  items={cartItems}
-                  cartButton={changeCartQuantity}
-                  displayType="cart"
-               />
-            </ul>
-         </div>
-
-         <div className="flex-container">
-            <FilterList
-               filterOptions={filterOptions}
-               sortItems={sortItems}
-            />
-
-            <div>
-               <ul className="results flex-container">
-                  <StoreItems
-                     items={filteredItems}
-                     cartButton={changeCartQuantity}
-                     displayType="storePage"
-                  />
-               </ul>
+      <div>
+         <header className="wrapper">
+            <div className="flex-container">
+               <button
+                  className="filter-panel-button hidden"
+                  onClick={toggleFilterPanel}
+               >
+                  <FontAwesomeIcon icon={faBars} />
+               </button>
+               <h1>Website</h1>
             </div>
 
-         </div>
+            <div className="cart">
+               <button className="cart-button" onClick={toggleCart}>
+                  {totalCartQuantity}
+                  <FontAwesomeIcon icon={faShoppingCart} />
+               </button>
+
+               <div className={cartIsActive ? "cart-items" : "cart-items hidden"}>
+                  <ul>
+                     <StoreItems
+                        items={cartItems}
+                        cartButton={changeCartQuantity}
+                        displayType="cart"
+                     />
+                  </ul>
+               </div>
+            </div>
+         </header>
+
+         <main className="wrapper">
+            <div className="flex-container">
+               <aside className={filterPanel ? "filter" : "filter off-screen"}>
+                  <div className="close-filter-panel flex-container">
+                     <button onClick={toggleFilterPanel}>
+                        <FontAwesomeIcon icon={faTimes} />
+                     </button>
+                  </div>
+
+                  <FilterList
+                     filterOptions={filterOptions}
+                     sortItems={sortItems}
+                  />
+               </aside>
+
+               <section className="results-container flex-container">
+                  <ul className="results flex-container">
+                     <StoreItems
+                        items={filteredItems}
+                        cartButton={changeCartQuantity}
+                        displayType="storePage"
+                     />
+                  </ul>
+               </section>
+            </div>
+         </main>
+         <footer>
+            <p>Created at Juno College</p>
+         </footer>
       </div>
    );
 }
