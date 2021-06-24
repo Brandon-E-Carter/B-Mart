@@ -290,8 +290,8 @@ function App() {
    }
 
    return (
-      <div className="wrapper">
-         <header>
+      <div>
+         <header className="wrapper">
             <div className="flex-container">
                <button
                   className="filter-panel-button hidden"
@@ -320,9 +320,9 @@ function App() {
             </div>
          </header>
 
-         <main>
+         <main className="wrapper">
             <div className="flex-container">
-               <aside className={filterPanel ? "filter" : "filter hidden"}>
+               <aside className={filterPanel ? "filter" : "filter off-screen"}>
                   <div className="close-filter-panel flex-container">
                      <button onClick={toggleFilterPanel}>
                         <FontAwesomeIcon icon={faTimes} />
@@ -346,6 +346,9 @@ function App() {
                </section>
             </div>
          </main>
+         <footer>
+            <p>Created at Juno College</p>
+         </footer>
       </div>
    );
 }

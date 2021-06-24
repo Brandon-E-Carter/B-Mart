@@ -13,6 +13,7 @@ function StoreItems(props) {
          <img src={image} alt={title} /></div>;
 
       const itemButton = (buttonType) => {
+         let buttonClass = `quantity-buttons ${buttonType}`;
          let icon = "plus";
 
          if (buttonType === "remove") {
@@ -28,11 +29,12 @@ function StoreItems(props) {
 
          if (buttonType === "addToCart") {
             buttonText = "Add to Cart"
+            buttonClass = "add-to-cart"
          }
 
          return (
             <button
-               className={buttonType}
+               className={buttonClass}
                onClick={() => cartButton(item, buttonType)}
             >
                {buttonText}
@@ -41,8 +43,14 @@ function StoreItems(props) {
       }
 
       const itemQuantity = (type) => {
+         let storeText = "";
+
+         if (type === "storeQuantity") {
+            storeText = " Items left in stock"
+         }
+
          return (
-            <p>{item[type]}</p>
+            <p>{item[type]}{storeText}</p>
          )
       }
 
@@ -81,10 +89,11 @@ function StoreItems(props) {
                {itemTitle}
 
                <div className="flex-container">
-                  {itemButton("addToCart")}
                   {itemPrice}
-                  {itemQuantity("storeQuantity")}
+                  {itemButton("addToCart")}
                </div>
+
+               {itemQuantity("storeQuantity")}
             </li>
       }
 
