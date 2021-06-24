@@ -1,21 +1,42 @@
-import "./StoreItems.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 function StoreItems(props) {
    const { items, cartButton, displayType } = props;
 
    const displayItems = items.map(item => {
-      const { description, image, price, title, id } = item;
+      const { image, price, title, id } = item;
 
       const itemTitle = <p>{title}</p>;
       const itemPrice = <p>${price}</p>;
-      const itemDescription = <p className="description">{description}</p>;
 
       const itemImage = <div className="image-container">
          <img src={image} alt={title} /></div>;
 
       const itemButton = (buttonType) => {
+         let icon = "plus";
+
+         if (buttonType === "remove") {
+            icon = "minus"
+         } else if (buttonType === "clear") {
+            icon = "trash-alt"
+         }
+
+         let buttonText = <>
+            <span className="sr-only">{buttonType}</span>
+            <FontAwesomeIcon icon={icon} />
+         </>
+
+         if (buttonType === "addToCart") {
+            buttonText = "Add to Cart"
+         }
+
          return (
-            <button onClick={() => cartButton(item, buttonType)}>{buttonType}</button>
+            <button
+               className={buttonType}
+               onClick={() => cartButton(item, buttonType)}
+            >
+               {buttonText}
+            </button>
          )
       }
 
@@ -38,12 +59,15 @@ function StoreItems(props) {
                <div>
                   {itemTitle}
 
-                  <div className="flex-container">
+                  <div className="cart-item-price flex-container">
                      {itemPrice}
-                     {itemButton("Remove")}
-                     {itemQuantity("cartQuantity")}
-                     {itemButton("Add")}
-                     {itemButton("Clear")}
+
+                     <div className="quantity flex-container">
+                        {itemButton("remove")}
+                        {itemQuantity("cartQuantity")}
+                        {itemButton("add")}
+                        {itemButton("clear")}
+                     </div>
                   </div>
                </div>
             </li>
@@ -57,11 +81,10 @@ function StoreItems(props) {
                {itemTitle}
 
                <div className="flex-container">
-                  {itemButton("Add")}
+                  {itemButton("addToCart")}
                   {itemPrice}
                   {itemQuantity("storeQuantity")}
                </div>
-               {itemDescription}
             </li>
       }
 

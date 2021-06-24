@@ -1,4 +1,5 @@
 import firebase from "firebase/app";
+import 'firebase/database';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCIvV312go5bLWe7VnFeoQMu4oCO2A3aGo",
@@ -8,6 +9,7 @@ const firebaseConfig = {
     messagingSenderId: "231329183729",
     appId: "1:231329183729:web:deba3113bbff8caeac7650"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
