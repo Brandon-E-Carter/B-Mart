@@ -79,12 +79,6 @@ header {
    border: 1px solid transparent;
 }
 
-.cart:focus,
-.cart:hover {
-   border: 1px solid #d9d9d9;
-   box-shadow: 0 0 5px #d9d9d9;
-}
-
 .cart-button {
    display: flex;
    justify-content: space-between;
@@ -104,6 +98,7 @@ header {
 .cart-button:hover {
    border-radius: 0;
    border-color: black;
+   box-shadow: 0 0 10px #d9d9d9;
 }
 
 .cart-items {
@@ -244,7 +239,7 @@ main.wrapper {
 
 .add-to-cart:focus,
 .add-to-cart:hover {
-   box-shadow: 0 0 5px #d9d9d9;
+   box-shadow: 0 0 10px #d9d9d9;
    border-radius: 0;
 }
 
