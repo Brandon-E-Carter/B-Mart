@@ -7,13 +7,10 @@ function FilterList(props) {
 
    const handleUserChoice = (e) => {
       let filters = appliedFilters;
-      console.log(e);
 
       if (e.target.checked) {
-         console.log("is checked")
          filters.push(e.target.value);
       } else {
-         console.log("not checked")
          filters = appliedFilters.filter(category => {
             return category !== e.target.value;
          })
