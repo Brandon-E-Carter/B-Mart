@@ -43,8 +43,6 @@ function App() {
          return { ...item, cartQuantity, storeQuantity, storeMaxQuantity };
       })
 
-      console.log(newItems);
-
       return newItems;
    }
 
